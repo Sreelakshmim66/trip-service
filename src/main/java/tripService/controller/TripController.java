@@ -1,29 +1,37 @@
 package tripService.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import tripService.model.Trip;
+import tripService.dto.TripDtos;
 import tripService.service.TripService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/tripController")
+@RequestMapping("/api/trips")
+@RequiredArgsConstructor
 public class TripController {
 
-//    Takes  user
-//    create trip id
-    @Autowired
-    TripService tripService;
+    private final TripService tripService;
 
-    @PostMapping("/createTrip")
-    public String createTrip(Trip trip) {
-        return tripService.createTrip(trip);
+    // POST /api/trips
+    @PostMapping
+    public ResponseEntity<TripDtos.TripResponse> createTrip(@Valid @RequestBody TripDtos.CreateTripRequest req) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(tripService.createTrip(req));
     }
 
-    @PostMapping("/listTrips")
-    public String listTrips(String userId) {
-        return tripService.listTrips(userId);
+    // GET /api/trips/user/{userId}
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<TripDtos.TripResponse>> getTripsByUser(@PathVariable String userId) {
+        return ResponseEntity.ok(tripService.getTripsByUser(userId));
+    }
+
+    // GET /api/trips/{tripId}
+    @GetMapping("/{tripId}")
+    public ResponseEntity<TripDtos.TripResponse> getTripById(@PathVariable String tripId) {
+        return ResponseEntity.ok(tripService.getTripById(tripId));
     }
 }

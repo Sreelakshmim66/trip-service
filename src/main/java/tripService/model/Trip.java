@@ -1,35 +1,41 @@
 package tripService.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
+@Table(name = "trips")
+@Data
+@NoArgsConstructor
 public class Trip {
 
     @Id
-    private String tripId;
-    private String source;
+    private String id;
+
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
     private String destination;
 
-    public String getSource() {
-        return source;
-    }
-    public void setSource(String source) {
-        this.source = source;
-    }
-    public String getDestination() {
-        return destination;
-    }
+    @Column(nullable = false)
+    private String userId;
 
-    public void setDestination(String destination) {
-        this.destination = destination;
-    }
+    private String startDate;
+    private String endDate;
 
-    public String getTripId() {
-        return tripId;
-    }
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
-    public void setTripId(String tripId) {
-        this.tripId = tripId;
+    @PrePersist
+    public void prePersist() {
+        if (this.id == null) {
+            this.id = UUID.randomUUID().toString();
+        }
     }
 }

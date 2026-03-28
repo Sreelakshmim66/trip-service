@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package tripService.grpc;
+
+option java_multiple_files = true;
+option java_package = "tripService.grpc";
+option java_outer_classname = "TripGrpcServiceProto";
+
+service TripGrpcService {
+  rpc validateTrip(ValidateTripRequest) returns (ValidateTripResponse);
+}
+
+message ValidateTripRequest {
+  string tripId = 1;
+  string userId = 2;
+}
+
+message ValidateTripResponse {
+  bool valid = 1;
+  string name = 2;
+}
+

@@ -17,4 +17,3 @@ message ValidateUserRequest {
 message ValidateUserResponse {
   bool valid = 1;
 }
-

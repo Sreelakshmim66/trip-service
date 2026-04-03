@@ -2,6 +2,9 @@ package tripService.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import lombok.AllArgsConstructor;
+
+import java.util.List;
 
 public class TripDtos {
 
@@ -18,6 +21,29 @@ public class TripDtos {
 
         private String startDate;
         private String endDate;
+    }
+
+    @Data
+    public static class SearchTripsRequest {
+        @NotBlank
+        private String destination;
+        private String startDate;
+        private String endDate;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class InventoryItem {
+        private String hotelId;
+        private String hotelName;
+        private double price;
+        private String photoUrl;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class SearchTripsResponse {
+        private List<InventoryItem> inventories;
     }
 
     @Data

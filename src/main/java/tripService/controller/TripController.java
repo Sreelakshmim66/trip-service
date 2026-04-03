@@ -17,6 +17,12 @@ public class TripController {
 
     private final TripService tripService;
 
+    // POST /api/trips/searchTrips
+    @PostMapping("/searchTrips")
+    public ResponseEntity<TripDtos.SearchTripsResponse> searchTrips(@Valid @RequestBody TripDtos.SearchTripsRequest req) {
+        return ResponseEntity.ok(tripService.searchTrips(req));
+    }
+
     // POST /api/trips
     @PostMapping
     public ResponseEntity<TripDtos.TripResponse> createTrip(@Valid @RequestBody TripDtos.CreateTripRequest req) {

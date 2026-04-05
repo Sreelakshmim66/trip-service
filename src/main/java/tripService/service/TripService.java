@@ -54,16 +54,16 @@ public class TripService {
 
     public TripDtos.SearchTripsResponse searchTrips(TripDtos.SearchTripsRequest req) {
         List<TripDtos.InventoryItem> inventories = Arrays.asList(
-            new TripDtos.InventoryItem("hotel-001", "The Grand Horizon", 189.99, "https://images.example.com/hotels/grand-horizon.jpg"),
-            new TripDtos.InventoryItem("hotel-002", "Sunset Bay Resort", 249.50, "https://images.example.com/hotels/sunset-bay.jpg"),
-            new TripDtos.InventoryItem("hotel-003", "Azure Coast Inn", 134.00, "https://images.example.com/hotels/azure-coast.jpg"),
-            new TripDtos.InventoryItem("hotel-004", "Palm Garden Hotel", 210.75, "https://images.example.com/hotels/palm-garden.jpg"),
-            new TripDtos.InventoryItem("hotel-005", "The Royal Suite", 399.00, "https://images.example.com/hotels/royal-suite.jpg"),
-            new TripDtos.InventoryItem("hotel-006", "Harbor View Lodge", 159.99, "https://images.example.com/hotels/harbor-view.jpg"),
-            new TripDtos.InventoryItem("hotel-007", "Mountain Peak Retreat", 175.00, "https://images.example.com/hotels/mountain-peak.jpg"),
-            new TripDtos.InventoryItem("hotel-008", "Cityscape Boutique", 220.00, "https://images.example.com/hotels/cityscape.jpg"),
-            new TripDtos.InventoryItem("hotel-009", "Oasis Desert Spa", 299.00, "https://images.example.com/hotels/oasis-desert.jpg"),
-            new TripDtos.InventoryItem("hotel-010", "Lakeside Haven", 145.50, "https://images.example.com/hotels/lakeside-haven.jpg")
+            new TripDtos.InventoryItem("hotel-001", "The Grand Horizon", 1899.9, "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80"),
+            new TripDtos.InventoryItem("hotel-002", "Sunset Bay Resort", 2495.0, "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80"),
+            new TripDtos.InventoryItem("hotel-003", "Azure Coast Inn", 1340.0, "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80"),
+            new TripDtos.InventoryItem("hotel-004", "Palm Garden Hotel", 2107.5, "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=80"),
+            new TripDtos.InventoryItem("hotel-005", "The Royal Suite", 3990.0, "https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=800&q=80"),
+            new TripDtos.InventoryItem("hotel-006", "Harbor View Lodge", 1599.9, "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=800&q=80"),
+            new TripDtos.InventoryItem("hotel-007", "Mountain Peak Retreat", 1750.0, "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80"),
+            new TripDtos.InventoryItem("hotel-008", "Cityscape Boutique", 2200.0, "https://images.unsplash.com/photo-1445019980597-93fa8acb246c?auto=format&fit=crop&w=800&q=80"),
+            new TripDtos.InventoryItem("hotel-009", "Oasis Desert Spa", 2990.0, "https://images.unsplash.com/photo-1542621334-a254cf47733d?auto=format&fit=crop&w=800&q=80"),
+            new TripDtos.InventoryItem("hotel-010", "Lakeside Haven", 1455.0, "https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&w=800&q=80")
         );
         return new TripDtos.SearchTripsResponse(inventories);
     }

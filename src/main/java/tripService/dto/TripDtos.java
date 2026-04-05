@@ -47,8 +47,30 @@ public class TripDtos {
     }
 
     @Data
+    public static class CreateTripByHotelRequest {
+        @NotBlank
+        private String hotelName;
+
+        @NotBlank
+        private String hotelId;
+
+        private String startDate;
+        private String endDate;
+
+        @NotBlank
+        private String userId;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class CreateTripResponse {
+        private String tripId;
+    }
+
+    @Data
     public static class TripResponse {
         private String id;
+        private String tripId;
         private String name;
         private String destination;
         private String userId;
@@ -58,6 +80,7 @@ public class TripDtos {
 
         public TripResponse(tripService.model.Trip t) {
             this.id          = t.getId();
+            this.tripId      = t.getTripId();
             this.name        = t.getName();
             this.destination = t.getDestination();
             this.userId      = t.getUserId();

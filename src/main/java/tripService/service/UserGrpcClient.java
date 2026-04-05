@@ -1,8 +1,8 @@
 package tripService.service;
 
-import com.travel.user.grpc.UserGrpcServiceGrpc;
-import com.travel.user.grpc.ValidateUserRequest;
-import com.travel.user.grpc.ValidateUserResponse;
+import com.internalproject.user_service.grpc.UserServiceGrpc;
+import com.internalproject.user_service.grpc.ValidateUserRequest;
+import com.internalproject.user_service.grpc.ValidateUserResponse;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.client.inject.GrpcClient;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class UserGrpcClient {
 
     @GrpcClient("user-service")
-    private UserGrpcServiceGrpc.UserGrpcServiceBlockingStub userStub;
+    private UserServiceGrpc.UserServiceBlockingStub userStub;
 
     public boolean validateUser(String userId) {
         try {

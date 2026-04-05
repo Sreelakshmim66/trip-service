@@ -23,17 +23,17 @@ public class TripController {
         return ResponseEntity.ok(tripService.searchTrips(req));
     }
 
-    // POST /api/trips
-    @PostMapping
-    public ResponseEntity<TripDtos.TripResponse> createTrip(@Valid @RequestBody TripDtos.CreateTripRequest req) {
+    // POST /api/trips/createTrip
+    @PostMapping("/createTrip")
+    public ResponseEntity<TripDtos.CreateTripResponse> createTrip(@Valid @RequestBody TripDtos.CreateTripByHotelRequest req) {
         return ResponseEntity.status(HttpStatus.CREATED).body(tripService.createTrip(req));
     }
 
-    // GET /api/trips/user/{userId}
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<TripDtos.TripResponse>> getTripsByUser(@PathVariable String userId) {
-        return ResponseEntity.ok(tripService.getTripsByUser(userId));
-    }
+//    // GET /api/trips/user/{userId}
+//    @GetMapping("/user/{userId}")
+//    public ResponseEntity<List<TripDtos.TripResponse>> getTripsByUser(@PathVariable String userId) {
+//        return ResponseEntity.ok(tripService.getTripsByUser(userId));
+//    }
 
     // GET /api/trips/{tripId}
     @GetMapping("/{tripId}")

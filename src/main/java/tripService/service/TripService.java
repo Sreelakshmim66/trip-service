@@ -21,30 +21,34 @@ public class TripService {
     private final TripRepository tripRepository;
     private final UserGrpcClient userGrpcClient;   // injected gRPC client
 
-    public TripDtos.TripResponse createTrip(TripDtos.CreateTripRequest req) {
-        // Validate userId via gRPC call to user-service
-        boolean userValid = userGrpcClient.validateUser(req.getUserId());
-        if (!userValid) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "User not found: " + req.getUserId());
-        }
+
+    public TripDtos.CreateTripResponse createTrip(TripDtos.CreateTripByHotelRequest req) {
+
+//        boolean userValid = userGrpcClient.validateUser(req.getUserId());
+//        if (!userValid) {
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+//                    "User not found: " + req.getUserId());
+//        }
+
+
 
         Trip trip = new Trip();
-        trip.setName(req.getName());
-        trip.setDestination(req.getDestination());
-        trip.setUserId(req.getUserId());
+        trip.setName(req.getHotelName());
+        trip.setDestination(req.getHotelName());
+        trip.setHotelId(req.getHotelId());
         trip.setStartDate(req.getStartDate());
         trip.setEndDate(req.getEndDate());
-
-        return new TripDtos.TripResponse(tripRepository.save(trip));
+        trip.setUserId(req.getUserId());
+        Trip saved = tripRepository.save(trip);
+        return new TripDtos.CreateTripResponse(saved.getTripId());
     }
 
-    public List<TripDtos.TripResponse> getTripsByUser(String userId) {
-        return tripRepository.findByUserId(userId)
-                .stream()
-                .map(TripDtos.TripResponse::new)
-                .collect(Collectors.toList());
-    }
+//    public List<TripDtos.TripResponse> getTripsByUser(String userId) {
+//        return tripRepository.findByUserId(userId)
+//                .stream()
+//                .map(TripDtos.TripResponse::new)
+//                .collect(Collectors.toList());
+//    }
 
     public TripDtos.TripResponse getTripById(String tripId) {
         Trip trip = tripRepository.findById(tripId)

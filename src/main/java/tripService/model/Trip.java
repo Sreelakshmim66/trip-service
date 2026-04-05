@@ -17,14 +17,18 @@ public class Trip {
     @Id
     private String id;
 
+    @Column(unique = true, nullable = false)
+    private String tripId;
+
     @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
     private String destination;
 
-    @Column(nullable = false)
     private String userId;
+
+    private String hotelId;
 
     private String startDate;
     private String endDate;
@@ -36,6 +40,9 @@ public class Trip {
     public void prePersist() {
         if (this.id == null) {
             this.id = UUID.randomUUID().toString();
+        }
+        if (this.tripId == null) {
+            this.tripId = UUID.randomUUID().toString();
         }
     }
 }

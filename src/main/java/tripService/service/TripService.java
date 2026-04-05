@@ -11,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -30,9 +31,8 @@ public class TripService {
 //                    "User not found: " + req.getUserId());
 //        }
 
-
-
         Trip trip = new Trip();
+        trip.setTripId(UUID.randomUUID().toString());
         trip.setName(req.getHotelName());
         trip.setDestination(req.getHotelName());
         trip.setHotelId(req.getHotelId());

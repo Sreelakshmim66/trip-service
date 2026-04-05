@@ -37,7 +37,7 @@ public class TripController {
 
     // GET /api/trips/{tripId}
     @GetMapping("/{tripId}")
-    public ResponseEntity<TripDtos.TripResponse> getTripById(@PathVariable String tripId) {
-        return ResponseEntity.ok(tripService.getTripById(tripId));
+    public ResponseEntity<TripDtos.TripResponse> fetchTripDetailsById(@PathVariable String tripId) {
+        return ResponseEntity.ok(tripService.fetchTripDetailsById(tripId));
     }
 }

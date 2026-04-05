@@ -1,6 +1,6 @@
 # Trip Service
 
-A Spring Boot microservice responsible for managing trips. It exposes REST and GraphQL APIs for trip operations, communicates with the User Service via gRPC for user validation, and registers itself with a Eureka service registry.
+A Spring Boot microservice responsible for managing trips. It exposes REST APIs for trip operations, communicates with the User Service via gRPC for user validation, and registers itself with a Eureka service registry.
 
 ---
 
@@ -12,13 +12,18 @@ A Spring Boot microservice responsible for managing trips. It exposes REST and G
 - **Spring Security** — endpoint security
 - **gRPC** — inter-service communication with User Service
 - **Eureka Client** — service discovery
-- **H2** — in-memory database (dev)
-- **PostgreSQL** — production database
+- **PostgreSQL** — database
+- **H2** — in-memory database (test only)
 - **Lombok** — boilerplate reduction
 
 ---
 
 ## Running the Service
+
+### Prerequisites
+- PostgreSQL running with a database named `Trip-service`
+- Eureka server running on port `8761`
+- User Service running on port `8081` (gRPC on `9091`)
 
 ### Standard
 ```bash
@@ -42,10 +47,39 @@ Key properties in `application.properties`:
 |---|---|
 | `server.port` | `8082` |
 | `grpc.server.port` | `9092` |
+| `spring.datasource.url` | `jdbc:postgresql://localhost:5432/Trip-service` |
+| `spring.datasource.username` | `postgres` |
+| `spring.datasource.password` | `0000` |
+| `spring.jpa.hibernate.ddl-auto` | `update` |
 | `eureka.client.service-url.defaultZone` | `http://localhost:8761/eureka/` |
-| `spring.h2.console.path` | `/h2-console` |
 
-> Ensure a Eureka server is running on port `8761` before starting this service.
+> Hibernate will auto-create the `trips` table on first startup via `ddl-auto=update`.
+
+---
+
+## Database Setup
+
+Create the database in PostgreSQL before starting the service:
+
+```sql
+CREATE DATABASE "Trip-service";
+```
+
+The `trips` table is created automatically by Hibernate on startup. To create it manually:
+
+```sql
+CREATE TABLE trips (
+    id VARCHAR(255) NOT NULL PRIMARY KEY,
+    trip_id VARCHAR(255) NOT NULL UNIQUE,
+    name VARCHAR(255) NOT NULL,
+    destination VARCHAR(255) NOT NULL,
+    user_id VARCHAR(255),
+    hotel_id VARCHAR(255),
+    start_date VARCHAR(255),
+    end_date VARCHAR(255),
+    created_at TIMESTAMP
+);
+```
 
 ---
 
@@ -53,36 +87,34 @@ Key properties in `application.properties`:
 
 Base path: `/api/trips`
 
-### Create a Trip
-**POST** `/api/trips`
+---
+
+### Create Trip by Hotel (Confirm Reservation)
+**POST** `/api/trips/createTrip`
+
+Called when a user confirms a hotel reservation. Validates the user via gRPC, saves the trip, and returns a generated `tripId`.
 
 Request:
 ```json
 {
-    "name": "Europe Getaway",
-    "destination": "Paris",
-    "userId": "user-123",
+    "hotelName": "The Grand Horizon",
+    "hotelId": "hotel-001",
     "startDate": "2026-05-01",
-    "endDate": "2026-05-10"
+    "endDate": "2026-05-07",
+    "userId": "user-123"
 }
 ```
 
 Response `201 Created`:
 ```json
 {
-    "id": "e3d2f...",
-    "name": "Europe Getaway",
-    "destination": "Paris",
-    "userId": "user-123",
-    "startDate": "2026-05-01",
-    "endDate": "2026-05-10",
-    "createdAt": "2026-04-03T12:00:00"
+    "tripId": "550e8400-e29b-41d4-a716-446655440000"
 }
 ```
 
 ---
 
-### Search Trip Inventories
+### Search Hotels
 **POST** `/api/trips/searchTrips`
 
 Request:
@@ -101,53 +133,32 @@ Response `200 OK`:
         {
             "hotelId": "hotel-001",
             "hotelName": "The Grand Horizon",
-            "price": 189.99,
-            "photoUrl": "https://images.example.com/hotels/grand-horizon.jpg"
+            "price": 1899.9,
+            "photoUrl": "https://..."
         }
-        // ... 10 items total
     ]
 }
 ```
 
-> Currently returns mocked data.
-
----
-
-### Get Trips by User
-**GET** `/api/trips/user/{userId}`
-
-Response `200 OK`: array of trip objects.
+> Currently returns mocked data (10 hotels).
 
 ---
 
 ### Get Trip by ID
 **GET** `/api/trips/{tripId}`
 
-Response `200 OK`: single trip object.
-
----
-
-## GraphQL API
-
-Endpoint: **POST** `/graphql`
-
-### Schema
-
-```graphql
-type Query {
-    searchTrips(destination: String!, startDate: String, endDate: String): [Trip!]!
-    myTrips(userId: String!): [Trip!]!
-    trip(id: String!): Trip
-}
-
-type Trip {
-    id: ID!
-    name: String!
-    destination: String!
-    userId: String!
-    startDate: String
-    endDate: String
-    createdAt: String
+Response `200 OK`:
+```json
+{
+    "id": "e3d2f...",
+    "tripId": "550e8400-...",
+    "name": "The Grand Horizon",
+    "destination": "The Grand Horizon",
+    "userId": "user-123",
+    "hotelId": "hotel-001",
+    "startDate": "2026-05-01",
+    "endDate": "2026-05-07",
+    "createdAt": "2026-04-03T12:00:00"
 }
 ```
 
@@ -161,16 +172,15 @@ The service exposes a gRPC server on port `9092` and acts as a client to the Use
 - **`validateTrip(tripId, userId)`** — validates that a trip exists and optionally belongs to the given user. Used by other microservices.
 
 ### Client — `UserGrpcClient`
-- Calls the User Service (discovered via Eureka as `USER-SERVICE`) to validate a user before creating a trip.
+- Calls the User Service (discovered via Eureka as `USER-SERVICE`, gRPC port `9091`) to validate a user before creating a trip.
+- Uses the proto definition from `src/main/proto/user.proto` (must match user-service exactly).
 
 ---
 
-## H2 Console (dev only)
+## Testing
 
-Access the in-memory database at:
+Tests use an H2 in-memory database and have gRPC/Eureka disabled via `src/test/resources/application.properties`.
+
+```bash
+./mvnw test
 ```
-http://localhost:8082/h2-console
-```
-- **JDBC URL:** `jdbc:h2:mem:tripdb`
-- **Username:** `sa`
-- **Password:** *(empty)*

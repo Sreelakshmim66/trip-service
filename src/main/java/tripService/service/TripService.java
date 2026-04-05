@@ -50,7 +50,7 @@ public class TripService {
 //                .collect(Collectors.toList());
 //    }
 
-    public TripDtos.TripResponse getTripById(String tripId) {
+    public TripDtos.TripResponse fetchTripDetailsById(String tripId) {
         Trip trip = tripRepository.findById(tripId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Trip not found"));
         return new TripDtos.TripResponse(trip);

@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface TripRepository extends JpaRepository<Trip, String> {
     List<Trip> findByUserId(String userId);
-    boolean existsByIdAndUserId(String id, String userId);
+    boolean existsByTripIdAndUserId(String tripId, String userId);
 }
 

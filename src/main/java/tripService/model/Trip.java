@@ -15,9 +15,6 @@ import java.util.UUID;
 public class Trip {
 
     @Id
-    private String id;
-
-    @Column(unique = true, nullable = false)
     private String tripId;
 
     @Column(nullable = false)
@@ -38,9 +35,6 @@ public class Trip {
 
     @PrePersist
     public void prePersist() {
-        if (this.id == null) {
-            this.id = UUID.randomUUID().toString();
-        }
         if (this.tripId == null) {
             this.tripId = UUID.randomUUID().toString();
         }

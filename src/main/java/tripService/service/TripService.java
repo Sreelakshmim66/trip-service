@@ -78,7 +78,7 @@ public class TripService {
         if (userId == null || userId.isBlank()) {
             return tripRepository.existsById(tripId);
         }
-        return tripRepository.existsByIdAndUserId(tripId, userId);
+        return tripRepository.existsByTripIdAndUserId(tripId, userId);
     }
 
     public Trip findById(String tripId) {

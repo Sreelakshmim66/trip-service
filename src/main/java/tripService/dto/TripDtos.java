@@ -69,7 +69,6 @@ public class TripDtos {
 
     @Data
     public static class TripResponse {
-        private String id;
         private String tripId;
         private String name;
         private String destination;
@@ -79,7 +78,6 @@ public class TripDtos {
         private String createdAt;
 
         public TripResponse(tripService.model.Trip t) {
-            this.id          = t.getId();
             this.tripId      = t.getTripId();
             this.name        = t.getName();
             this.destination = t.getDestination();
